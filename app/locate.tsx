@@ -1,15 +1,19 @@
-import { StyleSheet, Image, View, Text } from "react-native";
+import { useRouter } from "expo-router";
+import { StyleSheet, Image, View, Text, TouchableOpacity } from "react-native";
 
 const  Locate=()=>{
+    const router = useRouter();
     return(
-        <View style={style.mainScreen}>
+        <View>
+        <View  style={style.animateMainScreen}>
             <View style={style.imageScreen}>
-                <Image src="@\assets\images\png\Img_car4.png"/>
+                <Image source={require("@/assets/images/png/2.png")}/>
             </View>
             <View style={style.mainScreenContentBox}>
                 <Text style={style.onBoardScreenContentTitle}>Locate & Capture</Text>
-                <Text style={style.onBoardScreenContent}>Complete missions every month.</Text>
+                <Text style={style.onBoardScreenContent}>Locate & complete your mission.</Text>
             </View>
+        </View>
         </View>
     );
 }
@@ -17,34 +21,44 @@ const  Locate=()=>{
 export default Locate;
 
 const style =  StyleSheet.create({
-    mainScreen:{
-        backgroundColor:"white",
-        flex:1,
+    animateMainScreen:{
+        height:"99%",
+        width:"100%",
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
+        zIndex:0,
     },
     imageScreen:{
         padding:20,
-        height:350,
-        width:350,
-        justifyContent:"center",
-        alignItems:"center"
-    },
-    mainScreenContentBox:{
+        width:"100%",
+        height:"50%",
         justifyContent:"center",
         alignItems:"center",
-        width:300,
+        marginBottom:20,
+    },
+    mainScreenContentBox:{
+        justifyContent:"flex-start",
+        alignItems:"flex-start",
+        width:"90%",
+        marginLeft:30,
+        marginTop:30,
+        height:"20%"
     },
     onBoardScreenContentTitle:{
         color:"orange",
-        fontWeight:500,
+        fontWeight:"500",
         fontSize:17,
+        width:"90%",
         fontFamily:"Montserrat",
+        lineHeight:22,
     },
     onBoardScreenContent:{
         color:"black",
-        fontWeight:600,
+        fontWeight:"600",
         fontSize:31,
+        width:"90%",
+        alignItems:"flex-start",
         fontFamily: "Montserrat",
-    }
+        lineHeight:38,
+    },
 });

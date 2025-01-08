@@ -1,35 +1,26 @@
-import { StyleSheet, Image, View, Text, TouchableOpacity } from "react-native";
-import Animation, { SlideInRight, SlideOutLeft } from "react-native-reanimated";
+import { useRouter } from "expo-router";
+import { StyleSheet, Image, View, Text} from "react-native";
 
-const  EasyRankup=()=>{
+const EasyReward=()=>{
+    const router =  useRouter();
     return(
-        <View style={style.mainScreen}>
-        <Animation.View style={style.animateMainScreen} entering={SlideInRight.duration(800)} exiting={SlideOutLeft.duration(800)} >
+        <View>
+        <View style={style.animateMainScreen}>
             <View style={style.imageScreen}>
-                <Image source={require("@/assets/images/png/3.png")}/>
+                <Image source={require("@/assets/images/png/Img_car4.png")}/>
             </View>
             <View style={style.mainScreenContentBox}>
-                <Text style={style.onBoardScreenContentTitle}>Easy Rank Up</Text>
-                <Text style={style.onBoardScreenContent}>Rank up & Win Bigger Rewards.</Text>
+                <Text style={style.onBoardScreenContentTitle}>Easy Rewards</Text>
+                <Text style={style.onBoardScreenContent}>Complete missions every month.</Text>
             </View>
-            
-        </Animation.View>
-        <TouchableOpacity style={style.floatingButton}>
-        <Image source={require("@/assets/images/png/Vector.png")}/>
-        </TouchableOpacity>
+        </View>
         </View>
     );
 }
 
-export default EasyRankup;
+export default EasyReward;
 
 const style =  StyleSheet.create({
-    mainScreen:{
-        backgroundColor:"white",
-        flex:1,
-        justifyContent:"center",
-        alignItems:"center",
-    },
     animateMainScreen:{
         height:"100%",
         width:"100%",
