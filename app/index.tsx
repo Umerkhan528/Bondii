@@ -1,42 +1,85 @@
-import React from "react";
-import { StyleSheet, View, FlatList, TouchableOpacity, Image, Text, useWindowDimensions, ImageBackground, ScrollView } from "react-native";
+import React, { useRef, useState } from "react";
+import { 
+    StyleSheet, 
+    View, 
+    FlatList, 
+    TouchableOpacity, 
+    Image, 
+    Text, 
+    useWindowDimensions, 
+    ScrollView 
+} from "react-native";
+import Animated from "react-native-reanimated";
 import { onBoard } from "@/data/onboarddata";
-import Animation from "react-native-reanimated";
 import { onBoardType } from "@/data/onboarddata";
-import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
-
+import OnboardSvg from "@/assets/images/svg/onboard";
 
 const Index = () => {
-    const { width: SCREENWIDTH ,height: SCREENHEIGHT } = useWindowDimensions();
-    const x = useSharedValue(0);
-    const onScroll = useAnimatedScrollHandler({
-        onScroll: event => {
-            x.value = event.contentOffset.x;
-            console.log(x.value);
-        }
-    });
+    const route = useRouter();
+    const [currentIndex, setIndex] = useState(0);
+    const { width: SCREENWIDTH, height: SCREENHEIGHT } = useWindowDimensions();
+    const scrollViewRef = useRef<ScrollView>(null);
+    const flatlistRef = useRef<FlatList>(null);
+
+    const onboardScroll = (index: number) => {
+        const newCurrentIndex = Math.min(onBoard.length - 1, index); // Ensure index stays within bounds
+        setIndex(newCurrentIndex);
+        const scrollPosition = newCurrentIndex * SCREENWIDTH;
+
+        // Scroll the ScrollView
+        scrollViewRef.current?.scrollTo({ x: scrollPosition, animated: true });
+
+        // Scroll the FlatList
+        flatlistRef.current?.scrollToOffset({ offset: scrollPosition, animated: true });
+    };
+
     return (
-        <View style={style.mainScreen}>
-            <ScrollView onScroll={onScroll} style={{height:SCREENHEIGHT*0.46}} horizontal={true} showsHorizontalScrollIndicator={false} >
-            <Animated.View  style={[ style.mainImage ,{ height:SCREENHEIGHT*0.6 , flex: 0.4}]}>
-                <Image
-                    source={require('@/assets/images/png/whole.png')} />
-            </Animated.View>
-            </ScrollView>
-            <Animation.FlatList
-                onScroll={onScroll}
-                data={onBoard}
-                renderItem={({ item, index }) => (
-                    <SliderItem item={item}  />
-                )}
+        <View style={styles.mainScreen}>
+            {/* ScrollView for SVG or Image */}
+            <ScrollView
+                style={{ height: SCREENHEIGHT * 0.46 }}
                 horizontal
-                scrollEventThrottle={16}
                 showsHorizontalScrollIndicator={false}
-                pagingEnabled={true}
+                ref={scrollViewRef}
+                scrollEnabled={false}
+            >
+                <Animated.View style={[styles.mainImage, { height: SCREENHEIGHT * 0.6, flex: 0.4 }]}>
+                    <OnboardSvg />
+                </Animated.View>
+            </ScrollView>
+
+            {/* FlatList for Onboarding Content */}
+            <FlatList
+                ref={flatlistRef}
+                data={onBoard}
+                renderItem={({ item }) => <SliderItem item={item} />}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                scrollEventThrottle={16}
+                onMomentumScrollEnd={(event) => {
+                    const index = Math.round(event.nativeEvent.contentOffset.x / SCREENWIDTH);
+                    setIndex(index);
+                }}
             />
+
+            {/* Pagination Dots */}
+            <View style={styles.paginationContainer}>
+                {onBoard?.map((_, index) => (
+                    <View
+                        key={index}
+                        style={[
+                            styles.paginationDot,
+                            index === currentIndex && styles.activePaginationDot,
+                        ]}
+                    />
+                ))}
+            </View>
+
+            {/* Floating Button */}
             <TouchableOpacity
-                style={style.floatingButton}
-                onPress={() => console.log("Button Pressed")}
+                style={styles.floatingButton}
+                onPress={() => onboardScroll(currentIndex + 1)}
                 accessible={true}
                 accessibilityLabel="Next screen"
             >
@@ -49,34 +92,42 @@ const Index = () => {
     );
 };
 
-
-type props = {
+// Slider Item Component
+type Props = {
     item: onBoardType,
+};
 
-}
-
-const SliderItem = ({ item }: props) => {
-
-    const { width: SCREENWIDTH ,height: SCREENHEIGHT } = useWindowDimensions();
+const SliderItem = ({ item }: Props) => {
+    const { width: SCREENWIDTH, height: SCREENHEIGHT } = useWindowDimensions();
     return (
-        <View style={[style.animateMainScreen, { width: SCREENWIDTH * 1 , height: SCREENHEIGHT * 0.15,marginRight:SCREENWIDTH * 0}]}>
-            <View style={[style.mainScreenContentBox , {width: SCREENWIDTH * 0.8}]}>
-                <Text style={style.onBoardScreenContentTitle}>{item.title}</Text>
-                <Text style={style.onBoardScreenContent}>{item.subTitle}</Text>
+        <View
+            style={[
+                styles.animateMainScreen,
+                { width: SCREENWIDTH, height: SCREENHEIGHT * 0.15 },
+            ]}
+        >
+            <View style={[styles.mainScreenContentBox, { width: SCREENWIDTH * 0.8 }]}>
+                <Text style={styles.onBoardScreenContentTitle}>{item.title}</Text>
+                <Text style={styles.onBoardScreenContent}>{item.subTitle}</Text>
             </View>
         </View>
     );
-}
+};
 
-const style = StyleSheet.create({
+// Styles
+const styles = StyleSheet.create({
+    mainScreen: {
+        backgroundColor: "white",
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
     animateMainScreen: {
         justifyContent: "center",
         alignItems: "flex-start",
     },
     mainImage: {
-        marginLeft:15,
-        marginTop:15,
-        marginRight:15,
+        margin: 15,
         justifyContent: "center",
         alignItems: "flex-start",
     },
@@ -94,15 +145,8 @@ const style = StyleSheet.create({
         color: "black",
         fontWeight: "600",
         fontSize: 31,
-        alignItems: "flex-start",
         fontFamily: "Montserrat",
         lineHeight: 38,
-    },
-    mainScreen: {
-        backgroundColor: "white",
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
     },
     floatingButton: {
         backgroundColor: "orange",
@@ -115,6 +159,30 @@ const style = StyleSheet.create({
         bottom: 60,
         right: 30,
         zIndex: 5,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 8,
+    },
+    paginationContainer: {
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute",
+        bottom: 100,
+        width: "100%",
+    },
+    paginationDot: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        backgroundColor: "#ccc",
+        marginHorizontal: 5,
+    },
+    activePaginationDot: {
+        width: 25,
+        backgroundColor: "orange",
     },
 });
 
