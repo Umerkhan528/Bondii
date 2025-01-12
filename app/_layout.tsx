@@ -8,11 +8,11 @@ export default function RootLayout() {
       />
       <Stack.Screen
         name="locate"
-        options={{headerShown:false}}
+        // options={{headerShown:false}}
       />
       <Stack.Screen
         name="easyrankup"
-        options={{headerShown:false}}
+        // options={{headerShown:false}}
       />
     </Stack>
   );

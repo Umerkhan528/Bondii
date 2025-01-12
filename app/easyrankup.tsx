@@ -4,7 +4,7 @@ import Animation, { SlideInRight, SlideOutLeft } from "react-native-reanimated";
 const  EasyRankup=()=>{
     return(
         <View style={style.mainScreen}>
-        <Animation.View style={style.animateMainScreen} entering={SlideInRight.duration(800)} exiting={SlideOutLeft.duration(800)} >
+        <Animation.View style={style.animateMainScreen} entering={SlideInRight.duration(500).delay(500)} exiting={SlideOutLeft.duration(500).delay(500)} >
             <View style={style.imageScreen}>
                 <Image source={require("@/assets/images/png/3.png")}/>
             </View>
@@ -41,7 +41,7 @@ const style =  StyleSheet.create({
         width:"100%",
         height:"50%",
         justifyContent:"center",
-        alignItems:"center",
+        alignItems:"flex-end",
         marginBottom:20,
     },
     mainScreenContentBox:{

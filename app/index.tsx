@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+<<<<<<< HEAD
 import { 
     StyleSheet, 
     View, 
@@ -10,11 +11,32 @@ import {
     ScrollView 
 } from "react-native";
 import Animated from "react-native-reanimated";
+=======
+import { StyleSheet, View, FlatList, TouchableOpacity, Image, Text, useWindowDimensions, ImageBackground, ScrollView } from "react-native";
+>>>>>>> 67d03759661eb7879728e3afc66298e5269d9496
 import { onBoard } from "@/data/onboarddata";
 import { onBoardType } from "@/data/onboarddata";
+<<<<<<< HEAD
+import OnboardSvg from "@/assets/images/svg/onboard";
+=======
+import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
+import EasyReward from ".";
+import Locate from "./locate";
+import EasyRankup from "./easyrankup";
+import { useRouter } from "expo-router";
+import onBoardSvg from "@/assets/images/svg/onboard";
 import OnboardSvg from "@/assets/images/svg/onboard";
 
+>>>>>>> 67d03759661eb7879728e3afc66298e5269d9496
+
+
+// const displayScreen =[<EasyReward/>,
+//     <Locate/>,
+//     <EasyRankup/>
+// ]
+
 const Index = () => {
+<<<<<<< HEAD
     const route = useRouter();
     const [currentIndex, setIndex] = useState(0);
     const { width: SCREENWIDTH, height: SCREENHEIGHT } = useWindowDimensions();
@@ -38,6 +60,53 @@ const Index = () => {
             {/* ScrollView for SVG or Image */}
             <ScrollView
                 style={{ height: SCREENHEIGHT * 0.46 }}
+=======
+    let count = 0;
+    const router = useRouter();
+    const [currentIndex, setindex] = useState(0);
+    const { width: SCREENWIDTH, height: SCREENHEIGHT } = useWindowDimensions();
+    console.log(SCREENWIDTH);
+    const x = useSharedValue(0);
+    const scrollViewRef = useRef<ScrollView>(null);
+    const flatlistRef = useRef<FlatList>(null);
+
+
+    const onboardscroll = () => {
+        const newcurrentIndex = currentIndex + 1;
+        if(newcurrentIndex > 2){router.navigate("/easyrankup")}
+        setindex(newcurrentIndex);
+        const scrollPosition = SCREENWIDTH + count;
+        const flatlistPosition = SCREENWIDTH + 632;
+        console.log(" new cuurent index : ", { newcurrentIndex });
+        console.log(" currentindex : ", { currentIndex});
+        console.log(flatlistPosition);
+        console.log(" scrollimage : ", { count });
+        if ( newcurrentIndex == 2) {
+            scrollViewRef.current?.scrollToEnd();
+        } else {
+            scrollViewRef.current?.scrollTo({ x: scrollPosition, animated: true });
+            flatlistRef.current?.scrollToOffset({ offset: flatlistPosition, animated: true });
+            count = count + 832;
+        }
+    };
+
+    
+    return (
+        <View style={style.mainScreen}>
+            <ScrollView style={{ height: SCREENHEIGHT * 0.46 }} horizontal={true} showsHorizontalScrollIndicator={false} ref={scrollViewRef} scrollEnabled={false}>
+                <Animated.View style={[style.mainImage, { height: SCREENHEIGHT * 0.6, flex: 0.4 }]}>
+                    <OnboardSvg />
+                    {/* <Image
+                    source={require('@/assets/images/p/whole.png')} /> */}
+                </Animated.View>
+            </ScrollView>
+            <Animation.FlatList ref={flatlistRef}
+                scrollEnabled={false}
+                data={onBoard}
+                renderItem={({ item }) =>
+                    <SliderItem item={item} />
+                }
+>>>>>>> 67d03759661eb7879728e3afc66298e5269d9496
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 ref={scrollViewRef}
@@ -62,13 +131,18 @@ const Index = () => {
                     setIndex(index);
                 }}
             />
+<<<<<<< HEAD
 
             {/* Pagination Dots */}
             <View style={styles.paginationContainer}>
+=======
+            <View style={style.paginationContainer}>
+>>>>>>> 67d03759661eb7879728e3afc66298e5269d9496
                 {onBoard?.map((_, index) => (
                     <View
                         key={index}
                         style={[
+<<<<<<< HEAD
                             styles.paginationDot,
                             index === currentIndex && styles.activePaginationDot,
                         ]}
@@ -80,6 +154,18 @@ const Index = () => {
             <TouchableOpacity
                 style={styles.floatingButton}
                 onPress={() => onboardScroll(currentIndex + 1)}
+=======
+                            style.paginationDot,
+                            index === currentIndex && style.activePaginationDot,
+                        ]}
+                    />
+                ))}
+
+            </View>
+            <TouchableOpacity
+                style={style.floatingButton}
+                onPress={() => onboardscroll()}
+>>>>>>> 67d03759661eb7879728e3afc66298e5269d9496
                 accessible={true}
                 accessibilityLabel="Next screen"
             >
@@ -97,6 +183,7 @@ type Props = {
     item: onBoardType,
 };
 
+<<<<<<< HEAD
 const SliderItem = ({ item }: Props) => {
     const { width: SCREENWIDTH, height: SCREENHEIGHT } = useWindowDimensions();
     return (
@@ -109,6 +196,18 @@ const SliderItem = ({ item }: Props) => {
             <View style={[styles.mainScreenContentBox, { width: SCREENWIDTH * 0.8 }]}>
                 <Text style={styles.onBoardScreenContentTitle}>{item.title}</Text>
                 <Text style={styles.onBoardScreenContent}>{item.subTitle}</Text>
+=======
+}
+
+const SliderItem = ({ item }: props) => {
+
+    const { width: SCREENWIDTH, height: SCREENHEIGHT } = useWindowDimensions();
+    return (
+        <View style={[style.animateMainScreen, { width: SCREENWIDTH * 1, height: SCREENHEIGHT * 0.15, marginRight: SCREENWIDTH * 0 }]}>
+            <View style={[style.mainScreenContentBox, { width: SCREENWIDTH * 0.8 }]}>
+                <Text style={style.onBoardScreenContentTitle}>{item.title}</Text>
+                <Text style={style.onBoardScreenContent}>{item.subTitle}</Text>
+>>>>>>> 67d03759661eb7879728e3afc66298e5269d9496
             </View>
         </View>
     );
@@ -127,7 +226,13 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
     },
     mainImage: {
+<<<<<<< HEAD
         margin: 15,
+=======
+        marginLeft: 15,
+        marginTop: 15,
+        marginRight: 15,
+>>>>>>> 67d03759661eb7879728e3afc66298e5269d9496
         justifyContent: "center",
         alignItems: "flex-start",
     },
@@ -183,6 +288,25 @@ const styles = StyleSheet.create({
     activePaginationDot: {
         width: 25,
         backgroundColor: "orange",
+    },
+    paginationContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 100,
+        width: '100%',
+    },
+    paginationDot: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        backgroundColor: '#ccc',
+        marginHorizontal: 5,
+    },
+    activePaginationDot: {
+        width: 25,
+        backgroundColor: 'orange',
     },
 });
 

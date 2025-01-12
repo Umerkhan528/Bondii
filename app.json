@@ -6,7 +6,11 @@
           "backgroundColor": "#ffffff",
           "image": "./assets/images/splash.png",
           "dark": {
+<<<<<<< HEAD
             "image": "./assets/images/splash-preview-dark.png",
+=======
+            "image": "./assets/images/adaptive-icon.png",
+>>>>>>> 67d03759661eb7879728e3afc66298e5269d9496
             "backgroundColor": "#000000"
           }
         }
